@@ -2,5 +2,5 @@
 //eles são iguais, salvo que o constante pode ser injetado em serviços do tipo provider
 app.value("config",{
 	baseURL: "http://localhost",
-	baseURLExterna: "http://localhost/projeto-sigo-server"
+	baseURLExterna: "http://localhost/projeto-sigo/projeto-sigo-server"
 });
