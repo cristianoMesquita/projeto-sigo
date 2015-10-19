@@ -18,9 +18,23 @@
                         <span ng-show="novaOcorrenciaForm.educadorNome.$error.required && novaOcorrenciaForm.$dirty" class="label label-danger">*Nome do educador</span>
                         <span ng-show="novaOcorrenciaForm.mediacaoConflito.$error.required && novaOcorrenciaForm.$dirty" class="label label-danger">*Mediação de conflito</span>
                         <span ng-show="novaOcorrenciaForm.encaminhamento.$error.required && novaOcorrenciaForm.$dirty" class="label label-danger">*Encaminhamentos</span>
+                        <span ng-show="novaOcorrenciaForm.ocorrenciaTurno.$error.required && novaOcorrenciaForm.$dirty" class="label label-danger">*Turno</span>
                     </div>
                     <form name="novaOcorrenciaForm">
                         <legend>Dados da ocorrência</legend>
+                        <div class="row">
+                            <div class="col-xs-2 col-sm-2 col-md-2">
+                                <div class="form-group ">
+                                    <button class="btn btn-success btn-sm form-control" ng-click="addAlunoOcorrencia(ocorrencia)">Alunos envolvidos</button>
+                                </div>
+                            </div>
+                            <div class="col-xs-10 col-sm-10 col-md-10">
+                                <div class="form-group" ng-show="ocorrenciaAlunosEnvolvidos.length > 0" style="padding-bottom: 20px">
+                                    <legend>Alunos envolvidos na ocorrência</legend>
+                                    <span ng-repeat="alunoOcorrencia in ocorrenciaAlunosEnvolvidos" class="label label-danger">{{alunoOcorrencia.alunoNome | ellipsis:15}}</span>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-xs-3 col-sm-3 col-md-3">
                                 <div class="form-group ">
@@ -41,12 +55,14 @@
                             </div>
                             <div class="col-xs-2 col-sm-2 col-md-2 ">
                                 <div class="form-group ">
-                                    <select ng-model="ocorrencia.ocorrenciaTurno " name="ocorrenciaTurno " class="form-control input-sm">
+                                    <select ng-model="ocorrencia.ocorrenciaTurno " name="ocorrenciaTurno " class="form-control input-sm" ng-required="true">
                                         <option value="">Selecione o turno</option>
                                         <option ng-value="ocorrencia.manha ">Manhã</option>
                                         <option ng-value="ocorrencia.tarde">Tarde</option>
                                         <option ng-value="ocorrencia.noite">Noite</option>
                                     </select>
+                                    <span class="label label-danger " ng-show="novaOcorrenciaForm.ocorrenciaTurno.$error.required 
+                                    && novaOcorrenciaForm.$dirty ">Campo obrigatório</span>
                                 </div>
                             </div>
                         </div>
@@ -65,9 +81,52 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-info btn-block " ng-click="" ng-disabled="novaOcorrenciaForm.$invalid ">Registrar</button>
+                        <button class="btn btn-info btn-block " ng-disabled="novaOcorrenciaForm.$invalid ">Registrar</button>
                     </form>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal seleção de alunos envolvidos na ocorrência usei jquery para fazer a chamada desta modal verificar se existe algum problema em fazer isso usando jquery já que estou usando angularjs-->
+<div class="modal fade" id="alunoOcorrenciaModal" tabindex="-1" role="dialog" name="alunoOcorrenciaModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Selecione os alunos envolvidos na ocorrência</h4>
+            </div>
+            <div class="modal-body">
+                <form name="alunosOcorrenciaForm">
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12">
+                            <input type="text" name="criterioDeBusca" placeholder="Pesquisar aluno" class="form-control input-sm" ng-model="criterioDeBusca">
+                        </div>
+                    </div>
+                </form>
+                <table class="table table-bordered table-striped input-sm" ng-show="alunosOcorrencia.length > 0">
+                    <thead>
+                        <tr>
+                            <th><a href="" ng-click="ordenarPor('idAluno')">ID</a></th>
+                            <th><a href="" ng-click="ordenarPor('alunoNome')">Nome do Aluno</a></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-class="{'negrito':alunoOcorrencia.selecionado}" ng-repeat="alunoOcorrencia in alunosOcorrencia | filter:criterioDeBusca | orderBy:criterioDeOrdenacao:direcaoDaOrdenacao">
+                            <td>{{alunoOcorrencia.idAluno}}</td>
+                            <td>
+                                {{alunoOcorrencia.alunoNome | ellipsis:15}}</a>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="" value="" ng-model="alunoOcorrencia.selecionado">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" ng-click="alunoSelecionadoOcorrencia(alunosOcorrencia)">Confirmar</button>
             </div>
         </div>
     </div>

@@ -11,10 +11,14 @@ app.factory('alunoAPI', function($http,config){
     var _deleteAluno = function(aluno){
         return $http.post(config.baseURLExterna + "/Aluno/deletarAluno",aluno);
     };
+    var _tableOrder = function(direcaoDaOrdenacao){
+        return direcaoDaOrdenacao = !direcaoDaOrdenacao;
+    };
     return {
     	getAlunos:_getAlunos,
         getAluno:_getAluno,
         saveAluno: _saveAluno,
-        deleteAluno:_deleteAluno
+        deleteAluno:_deleteAluno,
+        tableOrder:_tableOrder
     }
 });

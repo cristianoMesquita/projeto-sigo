@@ -6,7 +6,7 @@ app.controller('novoAlunoCtrl', function($scope,$location,alunoAPI) {
             $scope.novoAlunoForm.$setPristine();
             $location.path("/pesquisaAluno");
         }).error(function(data) {
-        	 console.log(data);
+            console.log(data);
         });
     };
 });

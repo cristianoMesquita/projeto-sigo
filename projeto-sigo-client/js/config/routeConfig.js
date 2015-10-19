@@ -5,7 +5,12 @@ app.config(function($routeProvider){
 	});
 	$routeProvider.when("/novaOcorrencia",{
 		templateUrl:"views/novaOcorrencia.html",
-		controller:"novaOcorrenciaCtrl"
+		controller:"novaOcorrenciaCtrl",
+		resolve: {
+			alunoOcorrencia: function(alunoAPI,$route) {
+				return alunoAPI.getAlunos();
+			}
+		}
 	});
 	$routeProvider.when("/novoParecer",{
 		templateUrl:"views/novoParecer.html",

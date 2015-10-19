@@ -1,16 +1,16 @@
 app.controller('pesquisaAlunoCtrl', function($scope,aluno,alunoAPI){
   	
-  	$scope.alunos = aluno.data.result;
+  $scope.alunos = aluno.data.result;
 
   	/* var alunoteste = $scope.alunos.filter(function(elemento){
 		return elemento.idAluno === "1"; implementar carregamento do form apartir do array existente
 	});
   	console.log(alunoteste);*/
-  	
-  	$scope.ordenarPor = function (campo) {
-		$scope.criterioDeOrdenacao = campo;
-		$scope.direcaoDaOrdenacao = !$scope.direcaoDaOrdenacao;
-	};
+   $scope.ordenarPor = function(campo){
+        $scope.criterioDeOrdenacao = campo;
+        $scope.direcaoDaOrdenacao = alunoAPI.tableOrder($scope.criterioDeOrdenacao,$scope.direcaoDaOrdenacao);
+  };
+
 	$scope.deletarAlunos = function(alunos) {
         $scope.alunos = alunos.filter(function(aluno) {
         	if (!aluno.selecionado){
@@ -25,7 +25,7 @@ app.controller('pesquisaAlunoCtrl', function($scope,aluno,alunoAPI){
            	}
         });
     };
-	$scope.isAlunoSelecionado = function(alunos) {
+	  $scope.isAlunoSelecionado = function(alunos) {
         return alunos.some(function(aluno) {
             return aluno.selecionado;
         });

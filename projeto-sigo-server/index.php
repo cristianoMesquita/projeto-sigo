@@ -5,7 +5,7 @@ require 'DB.php';
 require 'Slim/Slim.php';
 \Slim\Slim::registerAutoloader();
 $app = new \Slim\Slim(array(
-    'debug' => false
+    'debug' => true
         ));
 $app->contentType("application/json");
 $app->error(function ( Exception $e = null) use ($app) {
