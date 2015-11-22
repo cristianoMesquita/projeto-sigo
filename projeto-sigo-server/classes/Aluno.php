@@ -53,6 +53,43 @@ class Aluno{
         }
         return $aluno;
     }
+    function post_addOcorrencia($ocorrencia){
+    	$sqlInsertOcorrencia = "INSERT INTO ocorrencia (encaminhamentos,data,mediacaoConflito,frequencia,turno,idCoordenador,idEducador) 
+		VALUES (:encaminhamentos,:data,:mediacaoConflito,:frequencia,:turno,:idCoordenador,:idEducador)";
+		$sqlInsertOcorrenciaAluno = "INSERT INTO ocorrencia_has_aluno (idOcorrencia,idAluno) 
+		VALUES (:idOcorrencia,:idAluno)";
+		 try {
+            DB::beginTransaction();
+
+            $stmt = DB::prepare($sqlInsertOcorrencia);
+			$stmt->bindParam("encaminhamentos",$ocorrencia->encaminhamentos);
+			$stmt->bindParam("data",$ocorrencia->data);
+			$stmt->bindParam("mediacaoConflito",$ocorrencia->mediacaoConflito);
+			$stmt->bindParam("frequencia",$ocorrencia->frequencia);
+			$stmt->bindParam("encaminhamentos",$ocorrencia->encaminhamentos);
+			$stmt->bindParam("encaminhamentos",$ocorrencia->encaminhamentos);
+			
+			$stmt->execute();
+			$aluno->idOcorrencia = DB::lastInsertId();
+
+			$stmt = DB::prepare($sqlInsertResponsavel);
+			$stmt->bindParam("nome",$aluno->responsavelNome);
+			
+			$stmt->execute();
+			$aluno->idResponsavel = DB::lastInsertId();
+
+			$stmt = DB::prepare($sqlInsertAluno);
+			$stmt->bindParam("nome",$aluno->alunoNome);
+		
+			$stmt->execute();
+
+            DB::commit();
+        } catch (Exception $ex) {
+            DB::rollBack();
+            throw new Exception($ex->getMessage());
+        }
+        return $ocorrencia;
+    }
     function get_carregarAlunos(){
 	    $sqlCarregarAlunos = "SELECT al.idAluno,al.nome as alunoNome,al.matricula,al.turma,al.serie,res.nome as responsavelNome,
 	    res.telefone as responsavelTelefone,res.celular as responsavelCelular,res.operadora as responsavelOperadora, 
